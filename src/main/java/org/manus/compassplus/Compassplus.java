@@ -2,12 +2,12 @@ package org.manus.compassplus;
 
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
@@ -29,7 +29,7 @@ public class Compassplus {
     @Mod.EventBusSubscriber(modid = MODID, value = Dist.CLIENT)
     public static class ClientEvents {
         @SubscribeEvent
-        public static void onRenderGameOverlay(RenderGameOverlayEvent.Text event) {
+        public static void onClientTick(TickEvent.ClientTickEvent event) {
             Minecraft instance = Minecraft.getInstance();
             Player player = instance.player;
 
@@ -45,7 +45,7 @@ public class Compassplus {
                             .replace("{y}", String.format("%.1f", y))
                             .replace("{z}", String.format("%.1f", z));
 
-                    instance.gui.setOverlayMessage(new TextComponent(coords), false);
+                    instance.gui.setOverlayMessage(Component.literal(coords), false);
                 }
             }
         }
