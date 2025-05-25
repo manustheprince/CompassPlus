@@ -2,9 +2,11 @@ package org.manus.compassplus;
 
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
@@ -32,18 +34,29 @@ public class Compassplus {
         public static void onClientTick(TickEvent.ClientTickEvent event) {
             Minecraft instance = Minecraft.getInstance();
             Player player = instance.player;
+            Level level = instance.level;
 
-            if (player != null) {
+            if (player != null && level != null) {
                 if (player.getMainHandItem().getItem() == Items.COMPASS ||
                     player.getOffhandItem().getItem() == Items.COMPASS) {
                     double x = player.getX();
                     double y = player.getY();
                     double z = player.getZ();
 
+                    String facing = player.getDirection().getName();
+                    double XRot = player.getXRot();
+                    double YRot = player.getYRot();
+
+                    String biome = instance.level.getBiome(player.blockPosition()).unwrapKey().orElse(null).location().getPath();
+
                     String format = Config.COORDINATES_FORMAT.get().toString();
                     String coords = format.replace("{x}", String.format("%.1f", x))
                             .replace("{y}", String.format("%.1f", y))
-                            .replace("{z}", String.format("%.1f", z));
+                            .replace("{z}", String.format("%.1f", z))
+                            .replace("{facing}", facing)
+                            .replace("{XRot}", String.format("%.1f", XRot))
+                            .replace("{YRot}", String.format("%.1f", YRot))
+                            .replace("{biome}", biome);
 
                     instance.gui.setOverlayMessage(Component.literal(coords), false);
                 }
