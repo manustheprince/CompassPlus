@@ -15,7 +15,7 @@ public class Config {
 
         COORDINATES_FORMAT = builder
                 .comment("Format for the coordinates display in Action Bar.",
-                        "Use {x}, {y}, {z} for coordinates.",
+                        "Use {x}, {y}, {z} for coordinates, {facing}, {XRot}, {YRot} for direction, rotation and {biome} to get the name of the biome.",
                         "Example: 'X: {x}, Y: {y}, Z: {z}'")
                 .define("coordinates_format", "{x} | {y} | {z}");
 
